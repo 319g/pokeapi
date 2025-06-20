@@ -12,6 +12,7 @@ import com.alea.pokeapi.constants.ResponseConstants;
 import com.alea.pokeapi.model.Pokemon;
 import com.alea.pokeapi.service.PokeapiService;
 
+
 @RestController
 @RequestMapping(path = "/pokemon")
 public class PokeapiController {
@@ -24,5 +25,14 @@ public class PokeapiController {
     return new Response<>(service.getByWeight(5), ResponseConstants.SUCCESS);
   }
   
-
+  @GetMapping(value = "/height")
+  public Response<List<Pokemon>> getByHeight() {
+    return new Response<>(service.getByHeigth(5), ResponseConstants.SUCCESS);
+  }
+  
+  @GetMapping(value = "/base-experience")
+  public Response<List<Pokemon>> getMethodName() {
+    return new Response<>(service.getByBaseExperience(5), ResponseConstants.SUCCESS);
+  }
+  
 }

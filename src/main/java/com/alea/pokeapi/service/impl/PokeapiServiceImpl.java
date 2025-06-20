@@ -3,6 +3,7 @@ package com.alea.pokeapi.service.impl;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 import org.springframework.stereotype.Service;
 
@@ -23,10 +24,25 @@ public class PokeapiServiceImpl implements PokeapiService {
 
   @Override
   public List<Pokemon> getByWeight(Integer limit) {
-    int apiSearchLimit = 2000; //todo cambiar por get count
+    return getPokemonList(limit, Pokemon::getWeight);
+  }
+
+  @Override
+  public List<Pokemon> getByHeigth(Integer limit) {
+    return getPokemonList(limit, Pokemon::getHeight);
+  }
+
+  @Override
+  public List<Pokemon> getByBaseExperience(Integer limit) {
+    return getPokemonList(limit, Pokemon::getBaseExperience);
+  }
+
+  private <T extends Comparable<? super T>> List<Pokemon> getPokemonList(Integer limit, Function<Pokemon, T> orderParam) {
+    int apiSearchLimit = 2000;
     PokemonSearchResult searchResult = feignClient.getPokemonList(apiSearchLimit);
     List<PokemonSearch> pokemonResults = searchResult.getResults();
-    List<Pokemon> allPokemon = pokemonResults.parallelStream()
+
+    List<Pokemon> pokemonsDetails = pokemonResults.parallelStream()
       .map(result -> {
         try {
           return feignClient.getPokemon(result.getName());
@@ -35,10 +51,10 @@ public class PokeapiServiceImpl implements PokeapiService {
         }
       })
       .filter(Objects::nonNull)
-      .sorted(Comparator.comparing(Pokemon::getWeight).reversed())
+      .sorted(Comparator.comparing(orderParam).reversed())
       .limit(limit)
       .toList();
 
-    return allPokemon;
+    return pokemonsDetails;
   }
 }
