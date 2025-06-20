@@ -5,3 +5,5 @@ spring:
 pokemonapi:
   client:
     url: https://pokeapi.co/api/v2/pokemon/
+  cache:
+    timeToLive: 300000
