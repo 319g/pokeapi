@@ -2,19 +2,26 @@ package com.alea.pokeapi.service.impl;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alea.pokeapi.integration.PokeapiFeignClient;
 import com.alea.pokeapi.model.Pokemon;
 import com.alea.pokeapi.model.PokemonSearch;
 import com.alea.pokeapi.model.PokemonSearchResult;
+import com.alea.pokeapi.service.PokeapiCacheService;
 import com.alea.pokeapi.service.PokeapiService;
 
 @Service
 public class PokeapiServiceImpl implements PokeapiService {
+
+  @Autowired
+  PokeapiCacheService cacheService;
 
   private PokeapiFeignClient feignClient;
 
@@ -43,13 +50,7 @@ public class PokeapiServiceImpl implements PokeapiService {
     List<PokemonSearch> pokemonResults = searchResult.getResults();
 
     List<Pokemon> pokemonsDetails = pokemonResults.parallelStream()
-      .map(result -> {
-        try {
-          return feignClient.getPokemon(result.getName());
-        } catch (Exception e) {
-          return null;
-        }
-      })
+      .map(result -> cacheService.getPokemonCache(result.getName()))
       .filter(Objects::nonNull)
       .sorted(Comparator.comparing(orderParam).reversed())
       .limit(limit)
@@ -57,4 +58,6 @@ public class PokeapiServiceImpl implements PokeapiService {
 
     return pokemonsDetails;
   }
+
+  
 }
