@@ -1,0 +1,42 @@
+{
+  "success": true,
+  "errorCode": null,
+  "message": "SUCCESS",
+  "response": [
+    {
+      "id": 10195,
+      "name": "venusaur-gmax",
+      "baseExperience": 236,
+      "height": 240,
+      "weight": 10000
+    },
+    {
+      "id": 10196,
+      "name": "charizard-gmax",
+      "baseExperience": 240,
+      "height": 280,
+      "weight": 10000
+    },
+    {
+      "id": 10197,
+      "name": "blastoise-gmax",
+      "baseExperience": 239,
+      "height": 250,
+      "weight": 10000
+    },
+    {
+      "id": 10198,
+      "name": "butterfree-gmax",
+      "baseExperience": 178,
+      "height": 170,
+      "weight": 10000
+    },
+    {
+      "id": 10199,
+      "name": "pikachu-gmax",
+      "baseExperience": 112,
+      "height": 210,
+      "weight": 10000
+    }
+  ]
+}

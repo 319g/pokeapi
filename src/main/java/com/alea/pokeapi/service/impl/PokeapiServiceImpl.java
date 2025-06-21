@@ -2,12 +2,11 @@ package com.alea.pokeapi.service.impl;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.alea.pokeapi.integration.PokeapiFeignClient;
@@ -24,6 +23,9 @@ public class PokeapiServiceImpl implements PokeapiService {
   PokeapiCacheService cacheService;
 
   private PokeapiFeignClient feignClient;
+
+  @Value("${pokemonapi.client.limit}")
+  private int apiSearchLimit;
 
   public PokeapiServiceImpl(PokeapiFeignClient feignClient) {
     this.feignClient = feignClient;
@@ -45,7 +47,6 @@ public class PokeapiServiceImpl implements PokeapiService {
   }
 
   private <T extends Comparable<? super T>> List<Pokemon> getPokemonList(Integer limit, Function<Pokemon, T> orderParam) {
-    int apiSearchLimit = 2000;
     PokemonSearchResult searchResult = feignClient.getPokemonList(apiSearchLimit);
     List<PokemonSearch> pokemonResults = searchResult.getResults();
 
