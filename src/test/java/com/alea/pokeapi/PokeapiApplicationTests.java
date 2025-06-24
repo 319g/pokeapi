@@ -4,18 +4,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import com.alea.pokeapi.integration.PokeapiFeignClient;
+import com.alea.pokeapi.model.Pokemon;
+import com.alea.pokeapi.model.PokemonSearchResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -23,6 +28,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class PokeapiApplicationTests {
+
+	@MockitoBean
+	private PokeapiFeignClient feignClient;
 
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -35,6 +43,14 @@ public class PokeapiApplicationTests {
 
 	@Test
 	public void test10_getByWeight() throws Exception {
+		Mockito.when(feignClient.getPokemonList(2000)).thenReturn(getFileAsJson("mockFiles/mockGetPokemonList.json", PokemonSearchResult.class));
+		Mockito.when(feignClient.getPokemon("bulbasaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail1.json", Pokemon.class));
+		Mockito.when(feignClient.getPokemon("ivysaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail2.json", Pokemon.class));
+		Mockito.when(feignClient.getPokemon("venusaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail3.json", Pokemon.class));
+		Mockito.when(feignClient.getPokemon("charmander")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail4.json", Pokemon.class));
+		Mockito.when(feignClient.getPokemon("charmeleon")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail5.json", Pokemon.class));
+		Mockito.when(feignClient.getPokemon("charizard")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail6.json", Pokemon.class));
+
 		MvcResult response = sendRequest(MockMvcRequestBuilders.get("/pokemon/weight"), "");
 		assertSuccess(response, getFileAsString("responseFiles/getByWeigthResponse.json"));
 	}
@@ -57,5 +73,10 @@ public class PokeapiApplicationTests {
 		String content = result.getResponse().getContentAsString();
 		JsonNode jsonResponse = objectMapper.readTree(content);
 		return objectMapper.writeValueAsString(jsonResponse);
+	}
+
+	private <T> T getFileAsJson(String filename, Class<T> clazz) throws Exception {
+		ClassPathResource resource = new ClassPathResource(filename);
+		return objectMapper.readValue(resource.getFile(), clazz);
 	}
 }
