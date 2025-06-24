@@ -12,9 +12,9 @@ import com.alea.pokeapi.model.PokemonSearchResult;
 public interface PokeapiFeignClient {
 
   @GetMapping()
-  PokemonSearchResult getPokemonList(@RequestParam("limit") Integer limit);
+  PokemonSearchResult getPokemonList(@RequestParam Integer limit, @RequestParam Integer offset);
 
   @GetMapping(value = "{name}")
-  Pokemon getPokemon(@PathVariable("name") String name);
+  Pokemon getPokemon(@PathVariable String name);
 
 }

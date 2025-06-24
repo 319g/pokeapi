@@ -1,5 +1,6 @@
 package com.alea.pokeapi.service.impl;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -47,10 +48,28 @@ public class PokeapiServiceImpl implements PokeapiService {
   }
 
   private <T extends Comparable<? super T>> List<Pokemon> getPokemonList(Integer limit, Function<Pokemon, T> orderParam) {
-    PokemonSearchResult searchResult = feignClient.getPokemonList(apiSearchLimit);
-    List<PokemonSearch> pokemonResults = searchResult.getResults();
+    List<PokemonSearch> allResults = new ArrayList<>();
+    boolean firstCall = true;
+    int page = 1;
 
-    List<Pokemon> pokemonsDetails = pokemonResults.parallelStream()
+    do {
+      PokemonSearchResult searchResult;
+      if(firstCall) {
+        searchResult = feignClient.getPokemonList(apiSearchLimit, page);
+        firstCall = false;
+      } else {
+        searchResult = feignClient.getPokemonList(limit, page);
+      }
+
+      if(searchResult.getResults() != null) {
+        allResults.addAll(searchResult.getResults());
+      }
+
+      page++;
+
+    } while (allResults.size() < limit);
+
+    List<Pokemon> pokemonsDetails = allResults.parallelStream()
       .map(result -> cacheService.getPokemonCache(result.getName()))
       .filter(Objects::nonNull)
       .sorted(Comparator.comparing(orderParam).reversed())
@@ -59,6 +78,4 @@ public class PokeapiServiceImpl implements PokeapiService {
 
     return pokemonsDetails;
   }
-
-  
 }

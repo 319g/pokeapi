@@ -43,7 +43,7 @@ public class PokeapiApplicationTests {
 
 	@Test
 	public void test10_getByWeight() throws Exception {
-		Mockito.when(feignClient.getPokemonList(2000)).thenReturn(getFileAsJson("mockFiles/mockGetPokemonList.json", PokemonSearchResult.class));
+		Mockito.when(feignClient.getPokemonList(2000, 1)).thenReturn(getFileAsJson("mockFiles/mockGetPokemonList.json", PokemonSearchResult.class));
 		Mockito.when(feignClient.getPokemon("bulbasaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail1.json", Pokemon.class));
 		Mockito.when(feignClient.getPokemon("ivysaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail2.json", Pokemon.class));
 		Mockito.when(feignClient.getPokemon("venusaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail3.json", Pokemon.class));
@@ -57,7 +57,7 @@ public class PokeapiApplicationTests {
 
 	@Test
 	public void test11_getByHeight() throws Exception {
-		Mockito.when(feignClient.getPokemonList(2000)).thenReturn(getFileAsJson("mockFiles/mockGetPokemonList.json", PokemonSearchResult.class));
+		Mockito.when(feignClient.getPokemonList(2000, 1)).thenReturn(getFileAsJson("mockFiles/mockGetPokemonList.json", PokemonSearchResult.class));
 		Mockito.when(feignClient.getPokemon("bulbasaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail1.json", Pokemon.class));
 		Mockito.when(feignClient.getPokemon("ivysaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail2.json", Pokemon.class));
 		Mockito.when(feignClient.getPokemon("venusaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail3.json", Pokemon.class));
@@ -71,7 +71,7 @@ public class PokeapiApplicationTests {
 
 	@Test
 	public void test12_getByBaseExperience() throws Exception {
-		Mockito.when(feignClient.getPokemonList(2000)).thenReturn(getFileAsJson("mockFiles/mockGetPokemonList.json", PokemonSearchResult.class));
+		Mockito.when(feignClient.getPokemonList(2000, 1)).thenReturn(getFileAsJson("mockFiles/mockGetPokemonList.json", PokemonSearchResult.class));
 		Mockito.when(feignClient.getPokemon("bulbasaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail1.json", Pokemon.class));
 		Mockito.when(feignClient.getPokemon("ivysaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail2.json", Pokemon.class));
 		Mockito.when(feignClient.getPokemon("venusaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail3.json", Pokemon.class));
