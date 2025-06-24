@@ -1,6 +1,7 @@
 package com.alea.pokeapi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +24,8 @@ import com.alea.pokeapi.model.Pokemon;
 import com.alea.pokeapi.model.PokemonSearchResult;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import feign.RetryableException;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -83,6 +86,30 @@ public class PokeapiApplicationTests {
 		assertSuccess(response, getFileAsString("responseFiles/getByBaseExperienceResponse.json"));
 	}
 
+	@Test
+	public void test13_getByWeightError() throws Exception {
+		Mockito.when(feignClient.getPokemonList(2000, 1)).thenThrow(RetryableException.class);
+
+		MvcResult response = sendRequest(MockMvcRequestBuilders.get("/pokemon/weight"), "");
+		assertFail(response);
+	}
+
+	@Test
+	public void test14_getByHeightError() throws Exception {
+		Mockito.when(feignClient.getPokemonList(2000, 1)).thenThrow(RetryableException.class);
+
+		MvcResult response = sendRequest(MockMvcRequestBuilders.get("/pokemon/height"), "");
+		assertFail(response);
+	}
+
+	@Test
+	public void test14_getByBaseExperienceError() throws Exception {
+		Mockito.when(feignClient.getPokemonList(2000, 1)).thenThrow(RetryableException.class);
+
+		MvcResult response = sendRequest(MockMvcRequestBuilders.get("/pokemon/base-experience"), "");
+		assertFail(response);
+	}
+
 	private String getFileAsString(String filename) throws Exception {
 		return objectMapper.writeValueAsString(
 			objectMapper.readValue(new ClassPathResource(filename).getFile(), Object.class)
@@ -106,5 +133,11 @@ public class PokeapiApplicationTests {
 	private <T> T getFileAsJson(String filename, Class<T> clazz) throws Exception {
 		ClassPathResource resource = new ClassPathResource(filename);
 		return objectMapper.readValue(resource.getFile(), clazz);
+	}
+
+	private void assertFail(MvcResult result) throws Exception {
+		String content = result.getResponse().getContentAsString();
+		JsonNode jsonNode = objectMapper.readTree(content);
+		assertFalse(jsonNode.get("success").asBoolean());
 	}
 }
