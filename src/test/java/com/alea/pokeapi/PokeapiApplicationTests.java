@@ -55,6 +55,34 @@ public class PokeapiApplicationTests {
 		assertSuccess(response, getFileAsString("responseFiles/getByWeigthResponse.json"));
 	}
 
+	@Test
+	public void test11_getByHeight() throws Exception {
+		Mockito.when(feignClient.getPokemonList(2000)).thenReturn(getFileAsJson("mockFiles/mockGetPokemonList.json", PokemonSearchResult.class));
+		Mockito.when(feignClient.getPokemon("bulbasaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail1.json", Pokemon.class));
+		Mockito.when(feignClient.getPokemon("ivysaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail2.json", Pokemon.class));
+		Mockito.when(feignClient.getPokemon("venusaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail3.json", Pokemon.class));
+		Mockito.when(feignClient.getPokemon("charmander")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail4.json", Pokemon.class));
+		Mockito.when(feignClient.getPokemon("charmeleon")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail5.json", Pokemon.class));
+		Mockito.when(feignClient.getPokemon("charizard")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail6.json", Pokemon.class));
+
+		MvcResult response = sendRequest(MockMvcRequestBuilders.get("/pokemon/height"), "");
+		assertSuccess(response, getFileAsString("responseFiles/getByHeightResponse.json"));
+	}
+
+	@Test
+	public void test12_getByBaseExperience() throws Exception {
+		Mockito.when(feignClient.getPokemonList(2000)).thenReturn(getFileAsJson("mockFiles/mockGetPokemonList.json", PokemonSearchResult.class));
+		Mockito.when(feignClient.getPokemon("bulbasaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail1.json", Pokemon.class));
+		Mockito.when(feignClient.getPokemon("ivysaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail2.json", Pokemon.class));
+		Mockito.when(feignClient.getPokemon("venusaur")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail3.json", Pokemon.class));
+		Mockito.when(feignClient.getPokemon("charmander")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail4.json", Pokemon.class));
+		Mockito.when(feignClient.getPokemon("charmeleon")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail5.json", Pokemon.class));
+		Mockito.when(feignClient.getPokemon("charizard")).thenReturn(getFileAsJson("mockFiles/mockGetPokemonDetail6.json", Pokemon.class));
+
+		MvcResult response = sendRequest(MockMvcRequestBuilders.get("/pokemon/base-experience"), "");
+		assertSuccess(response, getFileAsString("responseFiles/getByBaseExperienceResponse.json"));
+	}
+
 	private String getFileAsString(String filename) throws Exception {
 		return objectMapper.writeValueAsString(
 			objectMapper.readValue(new ClassPathResource(filename).getFile(), Object.class)

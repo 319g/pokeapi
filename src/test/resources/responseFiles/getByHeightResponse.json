@@ -1,0 +1,42 @@
+{
+  "success": true,
+  "errorCode": null,
+  "message": "SUCCESS",
+  "response": [
+    {
+      "id": 3,
+      "name": "venusaur",
+      "baseExperience": 236,
+      "height": 20,
+      "weight": 1000
+    },
+    {
+      "id": 6,
+      "name": "charizard",
+      "baseExperience": 240,
+      "height": 17,
+      "weight": 905
+    },
+    {
+      "id": 5,
+      "name": "charmeleon",
+      "baseExperience": 142,
+      "height": 11,
+      "weight": 190
+    },
+    {
+      "id": 2,
+      "name": "ivysaur",
+      "baseExperience": 142,
+      "height": 10,
+      "weight": 130
+    },
+    {
+      "id": 1,
+      "name": "bulbasaur",
+      "baseExperience": 64,
+      "height": 7,
+      "weight": 69
+    }
+  ]
+}
