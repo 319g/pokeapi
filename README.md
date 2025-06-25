@@ -12,7 +12,7 @@ mvn spring-boot:run
 ```
 
 ## Endpoints
-[!NOTE] Default port: 8080
+> **NOTE** Default port: 8080
 
 Returns the 5 heaviest pokemons
 ```
